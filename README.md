@@ -49,5 +49,5 @@ Built with **ASP.NET Core MVC**, **Entity Framework Core**, and **SQL Server**.
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/PhoneOrdersApp.git
+   git clone https://github.com/yasiGm/PhoneOrdersApp.git
    cd PhoneOrdersApp
