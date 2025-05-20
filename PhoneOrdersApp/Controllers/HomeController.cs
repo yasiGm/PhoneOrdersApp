@@ -15,6 +15,7 @@ namespace PhoneOrdersApp.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.ShowLoginButton = HttpContext.Session.GetInt32("UserId") == null;
             return View();
         }
 

@@ -1,0 +1,50 @@
+﻿@model PhoneOrdersApp.Models.Order
+
+@{
+    ViewData["Title"] = "Invoice";
+    decimal total = 0;
+}
+
+<h2>Invoice</h2>
+
+<h4>Customer Info</h4>
+<ul>
+    <li><strong>Name:</strong> @Model.Customer.Name</li>
+    <li><strong>Phone:</strong> @Model.Customer.Phone</li>
+    <li><strong>Address:</strong> @Model.Customer.Address</li>
+    <li><strong>Note:</strong> @Model.Customer.Note</li>
+</ul>
+
+<h4>Order Items</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.OrderItems.Count; i++)
+        {
+            var item = Model.OrderItems[i];
+            var lineTotal = item.Quantity * item.UnitPrice;
+            total += lineTotal;
+            <tr>
+                <td>@(i + 1)</td>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("N0")</td>
+                <td>@lineTotal.ToString("N0")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4>Total Amount: <strong>@total.ToString("N0")</strong></h4>
+
+<a href="/Orders/Create" class="btn btn-primary">New Order</a>
+<a class="btn btn-secondary" onclick="window.print()">🖨 Print</a>
+
