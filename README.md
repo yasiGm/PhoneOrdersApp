@@ -1,53 +1,97 @@
-# 📞 Phone Orders Management System
+:
 
-A lightweight web-based internal system for managing phone orders in a tools and hardware retail business.  
-Built with **ASP.NET Core MVC**, **Entity Framework Core**, and **SQL Server**.
+📞 Phone Orders Management System
+A lightweight internal web application for managing phone orders in a tools & hardware retail environment.
 
----
+🧱 Built with ASP.NET Core MVC, Entity Framework Core, and SQL Server.
 
-## 🛠 Features
+🛠 Features
+✅	Description
+👥 Role-based login	Separate access for Operators, Warehouse, and Managers
+🧾 Smart order creation	Add up to 5 custom products per order with dynamic fields
+🔍 Product search & autocomplete	Live search from synced product database
+💰 Auto-calculated totals	Quantity × Unit Price, plus grand total calculation
+🧾 Print-ready invoices	Invoice view with proper layout for printing
+📦 Warehouse panel	Approve/reject incoming orders with required reasons
+🔁 Rejected order follow-up	Operators can resubmit or cancel rejected orders
+📊 Manager dashboard	Daily stats, per-operator order breakdown, warehouse summary
+🧠 Smart customer handling	Suggests address if customer already exists by phone number
+🔐 Session-based role enforcement	Only authorized roles can access certain pages
+🎨 Custom home banner	Public landing page with integrated login button
 
-- ✅ **Role-based login** for Operators, Warehouse, and Managers
-- 🧾 **Order creation** with custom product entry (name, quantity, price)
-- 📋 **Auto-calculated invoice** with total cost
-- 📦 **Warehouse approval/rejection system**
-- 👤 **Dynamic customer creation** from the order page
-- 🔐 **Session-based access control**
-- 🖨 **Print-ready invoice view**
-- 🎨 Custom landing page with login integration
+🔐 Roles and Access
+Role	Access Rights
+Operator	Create & view own orders, follow up rejected
+Warehouse	View all pending/rejected orders, approve/reject
+Manager	Dashboard view, analytics, operator performance tracking
 
----
 
-## 🔐 Roles and Access
 
-| Role      | Access                                                                 |
-|-----------|------------------------------------------------------------------------|
-| Operator  | Create orders, view personal orders                                    |
-| Warehouse | View all pending orders, approve/reject them                          |
-| Manager   | (Reserved for future: analytics, reporting, user management, etc.)     |
+🔹 Custom Order Page (dynamic product fields + total calculator)
 
----
+🔹 Warehouse Panel with Approval/Reject flow
 
-## 📸 Screenshots
+🔹 Rejected Orders resubmission form
 
-![Home Banner](./images/welcome.png)
+🔹 Manager Dashboard with per-user and warehouse stats
 
----
+💾 Tech Stack
+ASP.NET Core MVC (.NET 6+)
 
-## 💾 Technologies Used
+Entity Framework Core
 
-- ASP.NET Core MVC (.NET 6+)
-- Entity Framework Core
-- SQL Server (localdb or full instance)
-- Bootstrap 5
-- Razor Views (cshtml)
+SQL Server (localdb or full instance)
 
----
+Razor Pages (cshtml)
 
-## 🚀 Getting Started
+Bootstrap 5
 
-1. **Clone the repository:**
+Session-based authentication (no Identity)
 
-   ```bash
-   git clone https://github.com/yasiGm/PhoneOrdersApp.git
-   cd PhoneOrdersApp
+🚀 Getting Started
+Clone the repository:
+
+bash
+Copy
+Edit
+git clone https://github.com/yasiGm/PhoneOrdersApp.git
+cd PhoneOrdersApp
+Configure database connection in appsettings.json
+
+Apply migrations (if applicable):
+
+bash
+Copy
+Edit
+dotnet ef database update
+Run the project:
+
+bash
+Copy
+Edit
+dotnet run
+✅ Default Users (for testing)
+Role	Username	Password
+Operator	sara	1234
+Warehouse	reza	1234
+Manager	mohsen	1234
+
+(Set in DB seeding or create manually)
+
+📂 Folder Structure (simplified)
+vbnet
+Copy
+Edit
+PhoneOrdersApp/
+├── Controllers/
+├── Views/
+│   ├── Orders/
+│   ├── Warehouse/
+│   └── Shared/
+├── Models/
+├── wwwroot/
+├── appsettings.json
+└── Program.cs
+📌 License
+This project is for educational and internal business purposes only.
+
