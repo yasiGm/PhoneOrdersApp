@@ -1,8 +1,50 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var isLoggedIn = Context.Session.GetInt32("UserId") != null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .hero-container {
+        position: relative;
+        text-align: center;
+    }
+
+    .hero-banner {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-button-overlay {
+        position: absolute;
+        bottom: 12%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+        .login-button-overlay a {
+            background-color: #ffc107;
+            border: none;
+            color: black;
+            font-size: 1.25rem;
+            padding: 12px 40px;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .login-button-overlay a:hover {
+                background-color: #e0a800;
+                color: white;
+            }
+</style>
+
+<div class="hero-container">
+    <img src="~/images/welcome.png" alt="Welcome Banner" class="hero-banner" />
+
+    @if (!isLoggedIn)
+    {
+        <div class="login-button-overlay">
+            <a href="/Account/Login">Login</a>
+        </div>
+    }
 </div>

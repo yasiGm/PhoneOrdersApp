@@ -1,0 +1,41 @@
+﻿@model List<PhoneOrdersApp.Models.Order>
+@{
+    ViewData["Title"] = "Warehouse Orders Overview";
+}
+
+<h2>All Warehouse Orders</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Items</th>
+            <th>Operator Note</th>
+            <th>Reject Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr class="@(order.Status == "Rejected" ? "table-danger" : "")">
+                <td>@order.Id</td>
+                <td>@order.Customer.Name</td>
+                <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@order.Status</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li>@item.ProductName - x@item.Quantity</li>
+                        }
+                    </ul>
+                </td>
+                <td>@order.ResubmissionNote</td>
+                <td>@order.RejectReason</td>
+            </tr>
+        }
+    </tbody>
+</table>

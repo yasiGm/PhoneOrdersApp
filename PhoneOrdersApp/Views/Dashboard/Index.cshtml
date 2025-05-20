@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Manager Dashboard";
+
+    // جلوگیری از null exception
+    var operatorStats = ViewBag.OperatorStats as List<dynamic> ?? new List<dynamic>();
+    int totalOrders = ViewBag.TotalOrdersToday ?? 0;
+    int approved = ViewBag.WarehouseApproved ?? 0;
+    int rejected = ViewBag.WarehouseRejected ?? 0;
+}
+
+<h2>📊 Today's Order Summary</h2>
+
+<div class="mb-4">
+    <strong>Total Orders Today:</strong> @totalOrders <br />
+    <strong>Approved by Warehouse:</strong> @approved <br />
+    <strong>Rejected by Warehouse:</strong> @rejected
+</div>
+
+<h3>Operator Activity</h3>
+
+@if (operatorStats.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Operator</th>
+                <th>Orders Today</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stat in operatorStats)
+            {
+                <tr>
+                    <td>@stat.Employee.Name</td>
+                    <td>@stat.Count</td>
+                    <td>
+                        <a asp-action="OrdersByOperator" asp-route-employeeId="@stat.Employee.Id" class="btn btn-info btn-sm">
+                            View Orders
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No operator activity for today.</p>
+}
+
+<h3>Warehouse</h3>
+<a asp-action="WarehouseOrders" class="btn btn-warning mt-3">
+    📦 View All Warehouse Orders
+</a>

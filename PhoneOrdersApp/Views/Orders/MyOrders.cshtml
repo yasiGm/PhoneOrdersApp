@@ -1,0 +1,28 @@
+﻿@model List<PhoneOrdersApp.Models.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+<h2>My Orders</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr><th>ID</th><th>Customer</th><th>Date</th><th>Status</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {@if (order.Status == "Rejected")
+            {
+                <tr style="background-color: #ffe6e6">
+                    <td colspan="5"><strong>رد شده توسط انبار</strong></td>
+                </tr>
+            }
+            var total = order.OrderItems.Sum(i => i.Quantity * i.UnitPrice);
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Customer.Name</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Status</td>
+                <td>@total.ToString("N0")</td>
+            </tr>
+        }
+    </tbody>
+</table>

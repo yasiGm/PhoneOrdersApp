@@ -1,0 +1,72 @@
+﻿@model List<PhoneOrdersApp.Models.Order>
+@{
+    ViewData["Title"] = "Warehouse Orders";
+}
+
+<h2>Pending Orders</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Registered By</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            var isResubmitted = !string.IsNullOrEmpty(order.ResubmissionNote); // فرض بر این‌که فیلد توضیح پیگیری توی مدل Order هست
+            <tr class="@(isResubmitted ? "table-warning" : "")">
+                <td>
+                    @order.Id
+                    @if (isResubmitted)
+                    {
+                        <span title="Resubmitted by operator">🔁</span>
+                    }
+                </td>
+                <td>@order.Customer.Name</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li>@item.ProductName - x@item.Quantity</li>
+                        }
+                    </ul>
+                    @if (isResubmitted)
+                    {
+                        <div><strong>Note:</strong> @order.ResubmissionNote</div>
+                    }
+                </td>
+                <td>@order.CreatedByEmployee.Username</td>
+                <td>
+                    <form method="post" asp-action="Approve" asp-route-id="@order.Id" style="display:inline;">
+                        <button type="submit" class="btn btn-success">✔ Approve</button>
+                    </form>
+
+                    <button type="button" class="btn btn-danger" onclick="showRejectForm(@order.Id)">✖ Reject</button>
+
+                    <div id="reject-form-@order.Id" style="display:none; margin-top:10px;">
+                        <form method="post" asp-action="Reject" asp-route-id="@order.Id">
+                            <textarea name="rejectReason" class="form-control" required placeholder="علت ریجکت را وارد کنید"></textarea>
+                            <br />
+                            <button type="submit" class="btn btn-danger btn-sm">ارسال</button>
+                        </form>
+                    </div>
+
+                    <a asp-action="Invoice" asp-controller="Orders" asp-route-id="@order.Id" class="btn btn-secondary mt-2">📄 Invoice</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function showRejectForm(orderId) {
+            document.getElementById("reject-form-" + orderId).style.display = "block";
+        }
+    </script>
+}

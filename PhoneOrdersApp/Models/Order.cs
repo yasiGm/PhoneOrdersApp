@@ -12,13 +12,13 @@ namespace PhoneOrdersApp.Models
         public Customer Customer { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new();
 
-
         [Required]
         public int CreatedByEmployeeId { get; set; }
         public Employee CreatedByEmployee { get; set; }
 
         [Required]
         public string Status { get; set; } = "Pending";
-
+        public string? RejectReason { get; set; }
+        public string? ResubmissionNote { get; set; }
     }
 }

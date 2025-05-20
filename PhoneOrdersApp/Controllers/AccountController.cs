@@ -40,6 +40,7 @@ namespace PhoneOrdersApp.Controllers
                     case "Manager":
                         return RedirectToAction("Index", "Dashboard");
                 }
+                HttpContext.Session.SetString("Username", user.Username);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -47,5 +48,11 @@ namespace PhoneOrdersApp.Controllers
             ViewBag.Error = "Invalid username or password";
             return View();
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Account");
+        }
+
     }
-    }
+}

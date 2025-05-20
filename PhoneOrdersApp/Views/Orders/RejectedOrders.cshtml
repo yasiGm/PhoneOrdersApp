@@ -1,0 +1,47 @@
+﻿@model List<PhoneOrdersApp.Models.Order>
+@{
+    ViewData["Title"] = "Rejected Orders";
+}
+
+<h2>Rejected Orders</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Reject Reason</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Customer.Name</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li>@item.ProductName - x@item.Quantity</li>
+                        }
+                    </ul>
+                </td>
+                <td>@order.RejectReason</td>
+                <td>
+                    <form method="post" asp-action="ResubmitOrder" asp-route-id="@order.Id" style="margin-bottom: 10px;">
+                        <textarea name="note" class="form-control" required placeholder="توضیح برای انبار..."></textarea>
+                        <button type="submit" class="btn btn-warning btn-sm mt-1">🔁 ارسال مجدد</button>
+                    </form>
+
+                    <form method="post" asp-action="CancelOrder" asp-route-id="@order.Id">
+                        <textarea name="note" class="form-control" required placeholder="علت کنسل..."></textarea>
+                        <button type="submit" class="btn btn-danger btn-sm mt-1">✖ کنسل</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
