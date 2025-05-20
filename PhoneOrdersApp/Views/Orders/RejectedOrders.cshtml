@@ -32,13 +32,13 @@
                 <td>@order.RejectReason</td>
                 <td>
                     <form method="post" asp-action="ResubmitOrder" asp-route-id="@order.Id" style="margin-bottom: 10px;">
-                        <textarea name="note" class="form-control" required placeholder="توضیح برای انبار..."></textarea>
-                        <button type="submit" class="btn btn-warning btn-sm mt-1">🔁 ارسال مجدد</button>
+                        <textarea name="note" class="form-control" required placeholder="Note for Warehouse..."></textarea>
+                        <button type="submit" class="btn btn-warning btn-sm mt-1">🔁 Resend</button>
                     </form>
 
                     <form method="post" asp-action="CancelOrder" asp-route-id="@order.Id">
-                        <textarea name="note" class="form-control" required placeholder="علت کنسل..."></textarea>
-                        <button type="submit" class="btn btn-danger btn-sm mt-1">✖ کنسل</button>
+                        <textarea name="note" class="form-control" required placeholder="Reason for rejection ..."></textarea>
+                        <button type="submit" class="btn btn-danger btn-sm mt-1">✖ Cancel Order</button>
                     </form>
                 </td>
             </tr>

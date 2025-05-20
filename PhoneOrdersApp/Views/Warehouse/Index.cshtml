@@ -18,7 +18,7 @@
     <tbody>
         @foreach (var order in Model)
         {
-            var isResubmitted = !string.IsNullOrEmpty(order.ResubmissionNote); // فرض بر این‌که فیلد توضیح پیگیری توی مدل Order هست
+            var isResubmitted = !string.IsNullOrEmpty(order.ResubmissionNote);
             <tr class="@(isResubmitted ? "table-warning" : "")">
                 <td>
                     @order.Id
@@ -50,9 +50,9 @@
 
                     <div id="reject-form-@order.Id" style="display:none; margin-top:10px;">
                         <form method="post" asp-action="Reject" asp-route-id="@order.Id">
-                            <textarea name="rejectReason" class="form-control" required placeholder="علت ریجکت را وارد کنید"></textarea>
+                            <textarea name="rejectReason" class="form-control" required placeholder="Enter a reason for rejection"></textarea>
                             <br />
-                            <button type="submit" class="btn btn-danger btn-sm">ارسال</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Send</button>
                         </form>
                     </div>
 

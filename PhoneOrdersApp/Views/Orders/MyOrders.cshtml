@@ -1,28 +1,78 @@
 ﻿@model List<PhoneOrdersApp.Models.Order>
+
 @{
     ViewData["Title"] = "My Orders";
 }
+
 <h2>My Orders</h2>
-<table class="table table-bordered">
+
+<div class="mb-3 d-flex gap-3 align-items-center">
+    <label>Status Filter:</label>
+    <select id="statusFilter" class="form-select w-auto" onchange="applyFilters()">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Rejected">Rejected</option>
+    </select>
+
+    <label>Search by Customer:</label>
+    <input type="text" id="searchInput" class="form-control w-auto" placeholder="Enter customer name" oninput="applyFilters()" />
+</div>
+
+<table class="table table-bordered table-striped" id="ordersTable">
     <thead>
-        <tr><th>ID</th><th>Customer</th><th>Date</th><th>Status</th><th>Total</th></tr>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var order in Model)
-        {@if (order.Status == "Rejected")
-            {
-                <tr style="background-color: #ffe6e6">
-                    <td colspan="5"><strong>رد شده توسط انبار</strong></td>
-                </tr>
-            }
+        {
             var total = order.OrderItems.Sum(i => i.Quantity * i.UnitPrice);
-            <tr>
+            var statusClass = order.Status == "Rejected" ? "table-danger"
+            : order.Status == "Shipped" ? "table-success"
+            : order.Status == "Pending" ? "table-warning"
+            : "";
+
+            var destination = order.Status == "Rejected"
+            ? Url.Action("RejectedOrders", "Orders", new { id = order.Id })
+            : Url.Action("Invoice", "Orders", new { id = order.Id });
+
+            <tr class="order-row @statusClass"
+                data-status="@order.Status"
+                data-customer="@order.Customer?.Name.ToLower()"
+                onclick="location.href='@destination'"
+                style="cursor: pointer;">
                 <td>@order.Id</td>
-                <td>@order.Customer.Name</td>
-                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.Customer?.Name</td>
+                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
                 <td>@order.Status</td>
                 <td>@total.ToString("N0")</td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        function applyFilters() {
+            const status = document.getElementById('statusFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            const rows = document.querySelectorAll('.order-row');
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+                const customer = row.getAttribute('data-customer');
+
+                const matchStatus = status === "All" || rowStatus === status;
+                const matchSearch = customer.includes(search);
+
+                row.style.display = (matchStatus && matchSearch) ? '' : 'none';
+            });
+        }
+    </script>
+}

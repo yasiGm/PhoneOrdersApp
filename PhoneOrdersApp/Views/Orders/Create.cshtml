@@ -20,16 +20,15 @@
 
     <h3>Products</h3>
     <div id="product-container">
-        <!-- Product rows will be dynamically added -->
     </div>
 
-    <button type="button" onclick="addProduct()">+ افزودن محصول</button>
+    <button type="button" onclick="addProduct()">+Add</button>
     <br /><br />
 
-    <strong>جمع کل سفارش: <span id="total-amount">0</span> تومان</strong>
+    <strong>Total: <span id="total-amount">0</span> Pound</strong>
     <br /><br />
 
-    <button type="submit">ثبت سفارش</button>
+    <button type="submit">Place Order</button>
 </form>
 
 @section Scripts {
@@ -44,24 +43,24 @@
             const div = document.createElement('div');
             div.classList.add('product-row');
             div.innerHTML = `
-                        <fieldset style="margin-bottom: 15px; padding:10px; border: 1px solid #ccc;">
-                            <legend>Product ${productIndex + 1}</legend>
-                            <label>Name:</label>
-                            <input type="text" class="product-name" name="items[${productIndex}].ProductName"
-                                oninput="searchProduct(this, ${productIndex})" list="products-list-${productIndex}" />
-                            <datalist id="products-list-${productIndex}"></datalist>
+                    <fieldset style="margin-bottom: 15px; padding:10px; border: 1px solid #ccc;">
+                        <legend>Product ${productIndex + 1}</legend>
+                        <label>Name:</label>
+                        <input type="text" class="product-name" name="items[${productIndex}].ProductName"
+                               oninput="searchProduct(this, ${productIndex})" list="products-list-${productIndex}" />
+                        <datalist id="products-list-${productIndex}"></datalist>
 
-                            <label>Quantity:</label>
-                            <input type="number" name="items[${productIndex}].Quantity" value="1" min="1"
-                                onchange="updatePriceOnQuantityChange(${productIndex})" />
+                        <label>Quantity:</label>
+                        <input type="number" name="items[${productIndex}].Quantity" value="1" min="1"
+                               onchange="updatePriceFromQuantity(${productIndex})" />
 
-                            <label>Price:</label>
-                            <input type="number" name="items[${productIndex}].UnitPrice" step="0.01" class="price"
-                                onchange="calculateTotal()" />
+                        <label>Price:</label>
+                        <input type="number" name="items[${productIndex}].UnitPrice" step="0.01" class="price"
+                               onchange="calculateTotal()" />
 
-                            <button type="button" onclick="removeProduct(this)">🗑</button>
-                        </fieldset>
-                    `;
+                        <button type="button" onclick="removeProduct(this)">🗑</button>
+                    </fieldset>
+                `;
             container.appendChild(div);
             productIndex++;
         }
@@ -75,8 +74,9 @@
         function calculateTotal() {
             let total = 0;
             document.querySelectorAll('.product-row').forEach(row => {
-                const price = parseFloat(row.querySelector('input[name$=".UnitPrice"]').value) || 0;
-                total += price;
+                const qty = parseFloat(row.querySelector('input[name$=".Quantity"]').value) || 0;
+                const unitPrice = parseFloat(row.querySelector('input[name$=".UnitPrice"]').value) || 0;
+                total += qty * unitPrice;
             });
             document.getElementById('total-amount').textContent = total.toLocaleString();
         }
@@ -101,40 +101,35 @@
 
             const exactMatch = data.find(p => p.name.toLowerCase() === term.toLowerCase());
             if (exactMatch) {
-                applyPrice(index, exactMatch.price);
+                applyProductPrice(index, exactMatch.price);
             }
         }
 
-        function applyPrice(index, unitPrice) {
+        function applyProductPrice(index, unitPrice) {
             const row = document.querySelectorAll('.product-row')[index];
             const qtyInput = row.querySelector('input[name$=".Quantity"]');
             const priceInput = row.querySelector('input[name$=".UnitPrice"]');
 
             const qty = parseInt(qtyInput.value || "1");
-            const total = unitPrice * qty;
-
-            priceInput.value = total.toFixed(2);
-            priceInput.setAttribute("data-baseprice", unitPrice); // مهم برای به‌روزرسانی بعدی
+            priceInput.value = unitPrice.toFixed(2); 
+            priceInput.setAttribute("data-baseprice", unitPrice);
 
             qtyInput.oninput = () => {
-                const newQty = parseInt(qtyInput.value || "1");
-                priceInput.value = (unitPrice * newQty).toFixed(2);
-                calculateTotal();
+                updatePriceFromQuantity(index);
             };
 
             calculateTotal();
         }
 
-        function updatePriceOnQuantityChange(index) {
+        function updatePriceFromQuantity(index) {
             const row = document.querySelectorAll('.product-row')[index];
-            const priceInput = row.querySelector('input[name$=".UnitPrice"]');
             const qtyInput = row.querySelector('input[name$=".Quantity"]');
+            const priceInput = row.querySelector('input[name$=".UnitPrice"]');
 
             const basePrice = parseFloat(priceInput.getAttribute('data-baseprice'));
             const qty = parseInt(qtyInput.value || "1");
 
             if (!isNaN(basePrice)) {
-                priceInput.value = (basePrice * qty).toFixed(2);
                 calculateTotal();
             }
         }

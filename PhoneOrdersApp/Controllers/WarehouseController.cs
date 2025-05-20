@@ -17,6 +17,7 @@ namespace PhoneOrdersApp.Controllers
             var orders = _context.Orders
                 .Where(o => o.Status == "Pending")
                 .Include(o => o.Customer)
+                .Include(o => o.CreatedByEmployee)
                 .Include(o => o.OrderItems)
                 .ToList();
 
@@ -38,7 +39,7 @@ namespace PhoneOrdersApp.Controllers
             var orders = _context.Orders
                 .Where(o => o.Status == "Pending" || o.Status == "Rejected")
                 .Include(o => o.Customer)
-                .Include(o => o.CreatedByEmployee)  // 👈 این خط مهمه
+                .Include(o => o.CreatedByEmployee)  
                 .Include(o => o.OrderItems)
                 .OrderByDescending(o => o.OrderDate)
                 .ToList();
