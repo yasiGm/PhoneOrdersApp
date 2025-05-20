@@ -71,10 +71,10 @@ Copy
 Edit
 dotnet run
 ✅ Default Users (for testing)
-Role	Username	Password
-Operator	sara	1234
-Warehouse	reza	1234
-Manager	mohsen	1234
+Role	/Username	/Password:
+Operator	/sara	/1234|
+Warehouse	/reza	/1234|
+Manager	/mohsen	/1234
 
 (Set in DB seeding or create manually)
 
