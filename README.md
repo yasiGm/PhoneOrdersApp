@@ -1,4 +1,4 @@
-:
+> **Demo project.** This is a standalone rebuild of a phone order module I originally built as a Software Developer at Abzarreza (May 2022 – Jun 2023), recreated here with sample/synthetic data to demonstrate the same functionality and stack. It is not connected to Abzarreza's systems or data.
 
 📞 Phone Orders Management System
 A lightweight internal web application for managing phone orders in a tools & hardware retail environment.
@@ -71,12 +71,14 @@ Copy
 Edit
 dotnet run
 ✅ Default Users (for testing)
-Role	/Username	/Password:
-Operator	/sara	/1234|
-Warehouse	/reza	/1234|
-Manager	/mohsen	/1234
+Passwords are stored using PBKDF2 hashing (see `Security/PasswordHasher.cs`), not plain text. To create a test user, hash a password with `PasswordHasher.Hash("your-password")` and insert it into the Employees table, e.g.:
 
-(Set in DB seeding or create manually)
+Role	Username	Password (plain, before hashing)
+Operator	sara	1234
+Warehouse	reza	1234
+Manager	mohsen	1234
+
+(Not seeded automatically — insert manually for local testing only.)
 
 📂 Folder Structure (simplified)
 vbnet

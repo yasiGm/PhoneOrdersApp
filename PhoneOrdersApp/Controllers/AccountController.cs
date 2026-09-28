@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PhoneOrdersApp.Models;
+using PhoneOrdersApp.Security;
 using System.Linq;
 
 namespace PhoneOrdersApp.Controllers
@@ -20,12 +21,12 @@ namespace PhoneOrdersApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(string username, string password)
         {
-            var user = _context.Employees
-                .FirstOrDefault(e => e.Username == username && e.PasswordHash == password);
+            var user = _context.Employees.FirstOrDefault(e => e.Username == username);
 
-            if (user != null)
+            if (user != null && PasswordHasher.Verify(password, user.PasswordHash))
             {
                 HttpContext.Session.SetInt32("UserId", user.Id);
                 HttpContext.Session.SetString("Role", user.Role);
